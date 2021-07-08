@@ -6,6 +6,9 @@ import br.com.alura.forum.modelo.Curso;
 import br.com.alura.forum.modelo.Topico;
 import br.com.alura.forum.repository.CursoRepository;
 
+/*
+ * Representam os dados que chegam do client para a API.
+ */
 public class TopicoForm {
 	@NotEmpty	
 	private String titulo;
