@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,13 +53,13 @@ public class TopicosController {
 	 * Se for passado no endereço do GET 
 	 * o nomeCurso(/topicos?^nomeCurso=Spring), então o parametro será preenchido.
 	 * Ao contrário o parametro virá null.
+	 * 
+	 * Pageable - para ser possível utilizá-lo como parâmetro, deve-se incluir a anotação 
+	 * @EnableSpringDataWebSupport na classe main.
 	 */
 	@GetMapping
-	public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina,
-			@RequestParam int qtd, @RequestParam String ordenacao) {
-		
-		Pageable paginacao = PageRequest.of(pagina, qtd, Direction.DESC, ordenacao);
-
+	public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, @PageableDefault(sort = "id", direction = Direction.DESC) Pageable paginacao) {
+	
 		if (nomeCurso == null) {
 			Page<Topico> topicos = topicoRepository.findAll(paginacao);
 			return TopicoDto.converter(topicos);
