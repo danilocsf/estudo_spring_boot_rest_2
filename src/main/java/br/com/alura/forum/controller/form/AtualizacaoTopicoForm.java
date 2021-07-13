@@ -6,45 +6,43 @@ import org.hibernate.validator.constraints.Length;
 
 import com.sun.istack.NotNull;
 
-import br.com.alura.forum.modelo.Curso;
 import br.com.alura.forum.modelo.Topico;
-import br.com.alura.forum.repository.CursoRepository;
+import br.com.alura.forum.repository.TopicoRepository;
 
-/*
- * Representam os dados que chegam do client para a API.
- */
-public class TopicoForm {
+public class AtualizacaoTopicoForm {
+	
 	@NotNull @NotEmpty @Length(min = 5)	
 	private String titulo;
+	
 	@NotNull @NotEmpty @Length(min = 10)
 	private String mensagem;
-	@NotEmpty
-	private String nomeCurso;
 	
-	public Topico converter(CursoRepository cursoRepository) {
-		Curso curso = cursoRepository.findByNome(nomeCurso);
-		return new Topico(titulo, mensagem, curso); 
-	}
+	
 	
 	public String getTitulo() {
 		return titulo;
 	}
+
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
+
 	public String getMensagem() {
 		return mensagem;
 	}
+
 	public void setMensagem(String mensagem) {
 		this.mensagem = mensagem;
 	}
-	public String getNomeCurso() {
-		return nomeCurso;
+
+	public Topico atualizar(Long id, TopicoRepository topicoRepository) {
+		Topico topico = topicoRepository.getById(id);
+		topico.setTitulo(this.titulo);
+		topico.setMensagem(this.mensagem);
+		/*Nao precisa chamar nenhum update, ao final do metodo o JPA ira atualizar os dados 
+		 * no banco automaticamente*/
+		return topico;
 	}
-	public void setNomeCurso(String nomrCurso) {
-		this.nomeCurso = nomrCurso;
-	}
-	
 	
 	
 }

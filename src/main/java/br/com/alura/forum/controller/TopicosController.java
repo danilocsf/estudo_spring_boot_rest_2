@@ -2,16 +2,18 @@ package br.com.alura.forum.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.alura.forum.controller.dto.DetalhesTopicoDto;
 import br.com.alura.forum.controller.dto.TopicoDto;
+import br.com.alura.forum.controller.form.AtualizacaoTopicoForm;
 import br.com.alura.forum.controller.form.TopicoForm;
 import br.com.alura.forum.modelo.Topico;
 import br.com.alura.forum.repository.CursoRepository;
@@ -64,9 +67,13 @@ public class TopicosController {
 	 * public List<TopicoDto> detalhar(@PathVariable("id")Long codigo)
 	 */
 	@GetMapping("/{id}")
-	public DetalhesTopicoDto detalhar(@PathVariable Long id) {
-		Topico topico = topicoRepository.getById(id);
-		return new DetalhesTopicoDto(topico);
+	public ResponseEntity<DetalhesTopicoDto> detalhar(@PathVariable Long id) {
+		Optional<Topico> topico = topicoRepository.findById(id);
+		if(topico.isPresent()) {
+			return ResponseEntity.ok(new DetalhesTopicoDto(topico.get()));
+		}		
+		/*Retorna um erro 404*/
+		return ResponseEntity.notFound().build();		
 	}
 	
 	/*O @RequestBody informa ao Spring que os parâmetros estão no corpo da Requisição
@@ -76,6 +83,7 @@ public class TopicosController {
 	@PostMapping
 	/*O ResponseEntity é utilizado para retornar o corpo da resposta (contido no objeto TopicoDto) e pra informar
 	 * o código do retorno - no caso 201*/
+	@Transactional
 	public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm form, UriComponentsBuilder uriBuilder) {
 		Topico topico = form.converter(cursoRepository);
 		topicoRepository.save(topico);
@@ -86,4 +94,32 @@ public class TopicosController {
 		/*Devolve o código 201, a URL do registro criado e os dados do registro criado*/
 		return ResponseEntity.created(uri).body(new TopicoDto(topico));
 	}
+	
+	/*
+	 * Utiliza uma nova classe para atualizacao pois pode ter dados que não devem ser alterados no objeto form de criação*/
+	@PutMapping("/{id}")
+	@Transactional
+	public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form, UriComponentsBuilder uriBuilder) {
+		Optional<Topico> optTopico = topicoRepository.findById(id);
+		if(optTopico.isPresent()) {
+			Topico topico = form.atualizar(id, topicoRepository);
+			return ResponseEntity.ok(new TopicoDto(topico));
+		}		
+		/*Retorna um erro 404*/
+		return ResponseEntity.notFound().build();
+	}
+	
+	
+	@DeleteMapping("/{id}")
+	@Transactional
+	public ResponseEntity<?> remover(@PathVariable Long id) {
+		Optional<Topico> optTopico = topicoRepository.findById(id);
+		if(optTopico.isPresent()) {
+			topicoRepository.deleteById(id);
+			return ResponseEntity.ok().build();
+		}	
+		/*Retorna um erro 404*/
+		return ResponseEntity.notFound().build();
+	}
+		
 }
