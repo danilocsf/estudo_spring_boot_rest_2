@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,18 +53,20 @@ public class TopicosController {
 	 * Ao contrário o parametro virá null.
 	 */
 	@GetMapping
-	public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina, int qtd ) {
-		Pageable paginacao = PageRequest.of(pagina, qtd);
+	public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina,
+			@RequestParam int qtd, @RequestParam String ordenacao) {
 		
-		if(nomeCurso == null) {
-			Page<Topico> topicos = topicoRepository.findAll(paginacao);		
-			return TopicoDto.converter(topicos);	
-		}else {
-			Page<Topico> topicos = topicoRepository.findByCursoNome(nomeCurso, paginacao);		
+		Pageable paginacao = PageRequest.of(pagina, qtd, Direction.DESC, ordenacao);
+
+		if (nomeCurso == null) {
+			Page<Topico> topicos = topicoRepository.findAll(paginacao);
 			return TopicoDto.converter(topicos);
-		}		
+		} else {
+			Page<Topico> topicos = topicoRepository.findByCursoNome(nomeCurso, paginacao);
+			return TopicoDto.converter(topicos);
+		}
 	}
-	
+
 	/*
 	 * @PathVariable informa ao Spring que o parâmetro será informado pela URL
 	 * (não usando o ?). 
