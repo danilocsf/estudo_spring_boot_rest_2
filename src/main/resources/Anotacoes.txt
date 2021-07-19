@@ -67,3 +67,25 @@ Para tratar os erros de validação do Bean Validation e personalizar o JSON,
 que será devolvido ao cliente da API, com as mensagens de erro, devemos
 criarar um método na classe @RestControllerAdvice e anotá-lo com @ExceptionHandler 
 e @ResponseStatus.
+
+Para utilizar o módulo de cache do Spring Boot, devemos adicioná-lo como dependência 
+do projeto no arquivo pom.xml;
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+
+Para habilitar o uso de caches na aplicação, devemos adicionar a anotação @EnableCaching 
+na classe main;
+
+Para que o Spring guarde o retorno de um método no cache, devemos anotá-lo com @Cacheable;
+
+Para o Spring invalidar algum cache após um determinado método ser chamado, devemos anotá-lo com @CacheEvict;
+
+Para utilizar o Spring Security adicionar o seguinte no pom.xml:
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+		
+		
