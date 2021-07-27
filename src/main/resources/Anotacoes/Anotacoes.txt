@@ -111,5 +111,7 @@ A lógica de autenticação, que consulta o usuário no banco de dados, deve imp
 interface UserDetailsService;
 
 Devemos indicar ao Spring Security qual o algoritmo de hashing de senha que utilizaremos na API, chamando o método passwordEncoder(), dentro do 
-método configure(AuthenticationManagerBuilder auth), que está na classe SecurityConfigurations.		
+método configure(AuthenticationManagerBuilder auth), que está na classe SecurityConfigurations.
+
+		
 		
