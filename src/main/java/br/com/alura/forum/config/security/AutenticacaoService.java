@@ -17,15 +17,15 @@ public class AutenticacaoService implements UserDetailsService{
 	@Autowired
 	private UsuarioRepository repository;
 	
-	/*Ao realizar o login, o formulario padrão do Spring irá chamar esse método por padrão,
-	 * para autenticação do usuario*/
+	/* Ao realizar o login, o formulario padrão do Spring (habilitado com o and()formLogin())
+	 *  irá chamar esse método por padrão, para autenticação do usuario*/
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<Usuario> usuario = repository.findByEmail(username);
 		if(usuario.isPresent()) {
 			return usuario.get();
 		}		
-		throw new UsernameNotFoundException("E-mail não encontrtado!");		
+		throw new UsernameNotFoundException("E-mail não encontrado!");		
 	}
 
 }
