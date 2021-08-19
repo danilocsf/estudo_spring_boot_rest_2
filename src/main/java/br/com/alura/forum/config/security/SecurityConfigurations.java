@@ -56,6 +56,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 		.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
 		//Liberando acesso ao endpoint /auth utilizando POST (autenticação)
 		.antMatchers(HttpMethod.POST, "/auth").permitAll()
+		//Liberando a exclusão somente para quem tem perfil MODERADOR
+		.antMatchers(HttpMethod.DELETE, "/topicos/*").hasRole("MODERADOR")
 		//Qualquer outra requisição tem q estar autenticado
 		.anyRequest().authenticated()
 		//and().formLogin(). Existe esse método que é para falar para o Spring 
