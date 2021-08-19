@@ -84,11 +84,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 	
 	
 	/*Configuraçoes de recursos estáticos (css, javascript, imagens)*/
-	@Override
+	@Override	
 	public void configure(WebSecurity web) throws Exception {
-		
-	}
-	
+		web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
+	}	
 	/*Utilizando apenas para exibir a senha 123456 codificada, para informar no arquivo
 	 * sql com os dados iniciais da aplicação*/
 	public static void main(String[] args) {
