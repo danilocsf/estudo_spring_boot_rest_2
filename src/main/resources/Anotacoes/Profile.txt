@@ -1,0 +1,12 @@
+Profiles devem ser utilizados para separar as configurações de cada tipo de ambiente, 
+tais como desenvolvimento, testes e produção.
+    
+A anotação @Profile serve para indicar ao Spring que determinada classe deve ser carregada 
+apenas quando determinados profiles estiverem ativos.
+
+É possível alterar o profile ativo da aplicação por meio do parâmetro 
+-Dspring.profiles.active.
+
+Ao não definir um profile para a aplicação, o Spring considera que o profile ativo dela 
+e o profile de nome default.
+
