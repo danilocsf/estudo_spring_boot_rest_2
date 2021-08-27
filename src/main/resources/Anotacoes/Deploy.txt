@@ -1,0 +1,16 @@
+O build da aplicação é realizado via maven, com o comando mvn clean package.
+Ao realizar o build, por padrão será criado um arquivo .jar.
+É possível passar parâmetros para as configurações da aplicação via variáveis de ambiente.
+É possível alterar o build para criar um arquivo .war, para deploy em servidores de aplicações.
+É possível utilizar o Docker para criação de imagens e de containers para aplicações que utilizam Java com Spring Boot.
+Devemos criar um arquivo Dockerfile no diretório raiz da aplicação, para ensinar ao Docker como deve ser gerada a imagem dela.
+É possível passar as variáveis de ambiente utilizadas pela aplicação para o container Docker.
+É possível realizar o deploy de aplicações Java com Spring Boot em ambientes Cloud, como o Heroku.
+Cada provedor Cloud pode exigir diferentes configurações adicionais a serem realizadas na aplicação, para que ela seja executada sem nenhum tipo de problema.
+
+Comando para gerar a imagem docker do projeto:
+docker build –t alura/forum
+
+Comando para rodar o Docker:
+docker run -p 8080:8080 -e FORUM_DATABASE_URL='jdbc:h2:mem:alura-forum' -e FORUM_DATABASE_USERNAME='sa'
+-e FORUM_DATABASE_PASSWORD='' -e FORUM_JWT_SECRET='123456' alura/forum
